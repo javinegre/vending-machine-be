@@ -98,3 +98,43 @@ class TestListVendingMachineSlots:
 
         assert response.status_code == status.HTTP_200_OK
         assert response.json() == expected_response
+
+    def test_invalid_quantity_filter_returns_bad_request(self, client):
+        response = client.get("/slots/?quantity=-1")
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.json() == {"quantity": [
+            "Ensure this value is greater than or equal to 0."]}
+
+    @pytest.mark.django_db
+    def test_list_slots_returns_filtered_response(self, client, slots_grid):
+        response = client.get("/slots/?quantity=1")
+
+        expected_response = [
+            {
+                "id": ANY,
+                "quantity": 0,
+                "coordinates": [1, 1],
+                "product": {"id": ANY, "name": "Product 10", "price": "10.40"},
+            },
+            {
+                "id": ANY,
+                "quantity": 1,
+                "coordinates": [2, 1],
+                "product": {"id": ANY, "name": "Product 9", "price": "10.40"},
+            },
+            {
+                "id": ANY,
+                "quantity": 0,
+                "coordinates": [1, 2],
+                "product": {"id": ANY, "name": "Product 5", "price": "10.40"},
+            },
+            {
+                "id": ANY,
+                "quantity": 1,
+                "coordinates": [2, 2],
+                "product": {"id": ANY, "name": "Product 4", "price": "10.40"},
+            },
+        ]
+
+        assert response.status_code == status.HTTP_200_OK
+        assert response.json() == expected_response
