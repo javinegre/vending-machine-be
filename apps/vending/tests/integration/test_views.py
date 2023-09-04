@@ -12,15 +12,15 @@ from apps.vending.tests.factories import ProductFactory, VendingMachineSlotFacto
 
 @pytest.fixture
 def products_list() -> list[Product]:
-    return [ProductFactory(id=uuid4(), name=f"Product {i}") for i in range(1, 11)]
+    return [ProductFactory(id=uuid4(), name=f"Product {i}") for i in range(1, 13)]
 
 
 @pytest.fixture
 def slots_grid(products_list) -> list[VendingMachineSlot]:
     """returns a grid of slots of 5x2"""
     slots = []
-    for row in range(1, 3):
-        for column in range(1, 6):
+    for row in range(1, 5):
+        for column in range(1, 4):
             slot = VendingMachineSlotFactory(
                 id=uuid4(), product=products_list.pop(), row=row, column=column, quantity=column-1
             )
@@ -34,66 +34,84 @@ class TestListVendingMachineSlots:
         response = client.get("/slots/")
 
         expected_response = [
-            {
-                "id": ANY,
-                "quantity": 0,
-                "coordinates": [1, 1],
-                "product": {"id": ANY, "name": "Product 10", "price": "10.40"},
-            },
-            {
-                "id": ANY,
-                "quantity": 1,
-                "coordinates": [2, 1],
-                "product": {"id": ANY, "name": "Product 9", "price": "10.40"},
-            },
-            {
-                "id": ANY,
-                "quantity": 2,
-                "coordinates": [3, 1],
-                "product": {"id": ANY, "name": "Product 8", "price": "10.40"},
-            },
-            {
-                "id": ANY,
-                "quantity": 3,
-                "coordinates": [4, 1],
-                "product": {"id": ANY, "name": "Product 7", "price": "10.40"},
-            },
-            {
-                "id": ANY,
-                "quantity": 4,
-                "coordinates": [5, 1],
-                "product": {"id": ANY, "name": "Product 6", "price": "10.40"},
-            },
-            {
-                "id": ANY,
-                "quantity": 0,
-                "coordinates": [1, 2],
-                "product": {"id": ANY, "name": "Product 5", "price": "10.40"},
-            },
-            {
-                "id": ANY,
-                "quantity": 1,
-                "coordinates": [2, 2],
-                "product": {"id": ANY, "name": "Product 4", "price": "10.40"},
-            },
-            {
-                "id": ANY,
-                "quantity": 2,
-                "coordinates": [3, 2],
-                "product": {"id": ANY, "name": "Product 3", "price": "10.40"},
-            },
-            {
-                "id": ANY,
-                "quantity": 3,
-                "coordinates": [4, 2],
-                "product": {"id": ANY, "name": "Product 2", "price": "10.40"},
-            },
-            {
-                "id": ANY,
-                "quantity": 4,
-                "coordinates": [5, 2],
-                "product": {"id": ANY, "name": "Product 1", "price": "10.40"},
-            },
+            [
+                {
+                    "id": ANY,
+                    "quantity": 0,
+                    "product": {"id": ANY, "name": "Product 12", "price": "10.40"},
+                },
+                {
+                    "id": ANY,
+                    "quantity": 1,
+                    "product": {"id": ANY, "name": "Product 11", "price": "10.40"},
+                },
+                {
+                    "id": ANY,
+                    "quantity": 2,
+                    "product": {"id": ANY, "name": "Product 10", "price": "10.40"},
+                },
+                None,
+            ],
+            [
+                {
+                    "id": ANY,
+                    "quantity": 0,
+                    "product": {"id": ANY, "name": "Product 9", "price": "10.40"},
+                },
+                {
+                    "id": ANY,
+                    "quantity": 1,
+                    "product": {"id": ANY, "name": "Product 8", "price": "10.40"},
+                },
+                {
+                    "id": ANY,
+                    "quantity": 2,
+                    "product": {"id": ANY, "name": "Product 7", "price": "10.40"},
+                },
+                None,
+            ],
+            [
+                {
+                    "id": ANY,
+                    "quantity": 0,
+                    "product": {"id": ANY, "name": "Product 6", "price": "10.40"},
+                },
+                {
+                    "id": ANY,
+                    "quantity": 1,
+                    "product": {"id": ANY, "name": "Product 5", "price": "10.40"},
+                },
+                {
+                    "id": ANY,
+                    "quantity": 2,
+                    "product": {"id": ANY, "name": "Product 4", "price": "10.40"},
+                },
+                None,
+            ],
+            [
+                {
+                    "id": ANY,
+                    "quantity": 0,
+                    "product": {"id": ANY, "name": "Product 3", "price": "10.40"},
+                },
+                {
+                    "id": ANY,
+                    "quantity": 1,
+                    "product": {"id": ANY, "name": "Product 2", "price": "10.40"},
+                },
+                {
+                    "id": ANY,
+                    "quantity": 2,
+                    "product": {"id": ANY, "name": "Product 1", "price": "10.40"},
+                },
+                None,
+            ],
+            [None, None, None, None],
+            [None, None, None, None],
+            [None, None, None, None],
+            [None, None, None, None],
+            [None, None, None, None],
+            [None, None, None, None],
         ]
 
         assert response.status_code == status.HTTP_200_OK
@@ -110,30 +128,68 @@ class TestListVendingMachineSlots:
         response = client.get("/slots/?quantity=1")
 
         expected_response = [
-            {
-                "id": ANY,
-                "quantity": 0,
-                "coordinates": [1, 1],
-                "product": {"id": ANY, "name": "Product 10", "price": "10.40"},
-            },
-            {
-                "id": ANY,
-                "quantity": 1,
-                "coordinates": [2, 1],
-                "product": {"id": ANY, "name": "Product 9", "price": "10.40"},
-            },
-            {
-                "id": ANY,
-                "quantity": 0,
-                "coordinates": [1, 2],
-                "product": {"id": ANY, "name": "Product 5", "price": "10.40"},
-            },
-            {
-                "id": ANY,
-                "quantity": 1,
-                "coordinates": [2, 2],
-                "product": {"id": ANY, "name": "Product 4", "price": "10.40"},
-            },
+            [
+                {
+                    "id": ANY,
+                    "quantity": 0,
+                    "product": {"id": ANY, "name": "Product 12", "price": "10.40"},
+                },
+                {
+                    "id": ANY,
+                    "quantity": 1,
+                    "product": {"id": ANY, "name": "Product 11", "price": "10.40"},
+                },
+                None,
+                None,
+            ],
+            [
+                {
+                    "id": ANY,
+                    "quantity": 0,
+                    "product": {"id": ANY, "name": "Product 9", "price": "10.40"},
+                },
+                {
+                    "id": ANY,
+                    "quantity": 1,
+                    "product": {"id": ANY, "name": "Product 8", "price": "10.40"},
+                },
+                None,
+                None,
+            ],
+            [
+                {
+                    "id": ANY,
+                    "quantity": 0,
+                    "product": {"id": ANY, "name": "Product 6", "price": "10.40"},
+                },
+                {
+                    "id": ANY,
+                    "quantity": 1,
+                    "product": {"id": ANY, "name": "Product 5", "price": "10.40"},
+                },
+                None,
+                None,
+            ],
+            [
+                {
+                    "id": ANY,
+                    "quantity": 0,
+                    "product": {"id": ANY, "name": "Product 3", "price": "10.40"},
+                },
+                {
+                    "id": ANY,
+                    "quantity": 1,
+                    "product": {"id": ANY, "name": "Product 2", "price": "10.40"},
+                },
+                None,
+                None,
+            ],
+            [None, None, None, None],
+            [None, None, None, None],
+            [None, None, None, None],
+            [None, None, None, None],
+            [None, None, None, None],
+            [None, None, None, None],
         ]
 
         assert response.status_code == status.HTTP_200_OK
