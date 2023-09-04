@@ -10,8 +10,8 @@ class ProductSerializer(serializers.Serializer):
 class VendingMachineSlotSerializer(serializers.Serializer):
     id = serializers.UUIDField()
     quantity = serializers.IntegerField()
-    coordinates = serializers.SerializerMethodField()
+    # coordinates = serializers.SerializerMethodField()
     product = ProductSerializer()
 
-    def get_coordinates(self, instance) -> list[int, int]:
-        return [instance.column, instance.row]
+    # def get_coordinates(self, instance) -> list[int, int]:
+    #     return [instance.column, instance.row]
