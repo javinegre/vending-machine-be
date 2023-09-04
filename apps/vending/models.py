@@ -3,6 +3,8 @@ from decimal import Decimal
 from uuid import uuid4
 from django.core.validators import MinValueValidator, MaxValueValidator
 
+from apps.vending.constants import VENDING_MACHINE_MAX_COLUMNS, VENDING_MACHINE_MAX_ROWS
+
 
 class Product(models.Model):
     class Meta:
@@ -31,6 +33,6 @@ class VendingMachineSlot(models.Model):
     quantity = models.IntegerField(
         validators=[MaxValueValidator(100), MinValueValidator(0)])
     row = models.IntegerField(
-        validators=[MaxValueValidator(10), MinValueValidator(1)])
+        validators=[MaxValueValidator(VENDING_MACHINE_MAX_ROWS), MinValueValidator(1)])
     column = models.IntegerField(
-        validators=[MaxValueValidator(10), MinValueValidator(1)])
+        validators=[MaxValueValidator(VENDING_MACHINE_MAX_COLUMNS), MinValueValidator(1)])
