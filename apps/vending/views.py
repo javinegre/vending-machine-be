@@ -7,7 +7,8 @@ from apps.vending.serializers import VendingMachineSlotSerializer
 from apps.vending.validators import ListSlotsValidator
 
 from apps.vending.constants import VENDING_MACHINE_MAX_COLUMNS, VENDING_MACHINE_MAX_ROWS
-from apps.vending.product_order import ProductOrder
+from apps.vending.product_order import OrderMissingResourceError, ProductOrder
+from rest_framework import status
 
 
 class VendingMachineSlotView(APIView):
@@ -34,7 +35,10 @@ class VendingMachineSlotView(APIView):
 
 class ProductOrderView(APIView):
     def post(self, request: Request) -> Response:
-        result = ProductOrder().buy(
-            request.data['customer_id'], request.data['slot_id'])
+        try:
+            result = ProductOrder().buy(
+                request.data['customer_id'], request.data['slot_id'])
+        except OrderMissingResourceError as ex:
+            return Response(status=status.HTTP_404_NOT_FOUND, data={"error": ex.message})
 
         return Response(data=result)

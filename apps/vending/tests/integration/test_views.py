@@ -199,7 +199,7 @@ class TestListVendingMachineSlots:
 
 @pytest.mark.django_db
 class TestProductOrder:
-    def test_product_order(self, client):
+    def test_product_order_successful(self, client):
         test_slot = VendingMachineSlotFactory()
         test_customer = CustomerFactory()
 
@@ -210,4 +210,16 @@ class TestProductOrder:
         response = client.post(
             "/buy/", data={"customer_id": test_customer.id, "slot_id": test_slot.id})
 
+        assert response.json() == expected_response
+
+    def test_product_order_failed(self, client):
+        test_slot = VendingMachineSlotFactory(quantity=0)
+        test_customer = CustomerFactory()
+
+        expected_response = {'error': 'Not enough stock'}
+
+        response = client.post(
+            "/buy/", data={"customer_id": test_customer.id, "slot_id": test_slot.id})
+
+        assert response.status_code == status.HTTP_404_NOT_FOUND
         assert response.json() == expected_response
