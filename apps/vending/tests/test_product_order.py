@@ -1,7 +1,7 @@
 import pytest
 
 from apps.customer.tests.factories import CustomerFactory, WalletFactory
-from apps.vending.product_order import OrderMissingResourceError, ProductOrder
+from apps.vending.product_order import OrderMissingResourceError, OrderPriceMismatchError, ProductOrder
 from apps.vending.tests.factories import VendingMachineSlotFactory
 
 
@@ -13,7 +13,7 @@ class TestProductOrder:
         test_customer = CustomerFactory()
 
         order = ProductOrder()
-        result = order.buy(test_customer.id, test_slot.id)
+        result = order.buy(test_customer.id, test_slot.id, "10.40")
 
         assert isinstance(result, dict)
 
@@ -28,7 +28,7 @@ class TestProductOrder:
         result = ""
         # with pytest.raises(OrderMissingResourceError):
         try:
-            order.buy(test_customer.id, test_slot.id)
+            order.buy(test_customer.id, test_slot.id, "10.40")
         except OrderMissingResourceError as ex:
             result = ex.message
 
@@ -44,8 +44,24 @@ class TestProductOrder:
 
         result = ""
         try:
-            order.buy(test_customer.id, test_slot.id)
+            order.buy(test_customer.id, test_slot.id, "10.40")
         except OrderMissingResourceError as ex:
+            result = ex.message
+
+        assert result == expected_error_message
+
+    def test_buy_fail_price_mismatch(self):
+        test_slot = VendingMachineSlotFactory()
+        test_customer = CustomerFactory()
+
+        expected_error_message = "Price mismatch"
+
+        order = ProductOrder()
+
+        result = ""
+        try:
+            order.buy(test_customer.id, test_slot.id, "40.10")
+        except OrderPriceMismatchError as ex:
             result = ex.message
 
         assert result == expected_error_message

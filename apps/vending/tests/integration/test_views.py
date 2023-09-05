@@ -208,7 +208,7 @@ class TestProductOrder:
         }
 
         response = client.post(
-            "/buy/", data={"customer_id": test_customer.id, "slot_id": test_slot.id})
+            "/buy/", data={"customer_id": test_customer.id, "slot_id": test_slot.id, "price": "10.40"})
 
         assert response.json() == expected_response
 
@@ -219,7 +219,7 @@ class TestProductOrder:
         expected_response = {'error': 'Not enough stock'}
 
         response = client.post(
-            "/buy/", data={"customer_id": test_customer.id, "slot_id": test_slot.id})
+            "/buy/", data={"customer_id": test_customer.id, "slot_id": test_slot.id, "price": "10.40"})
 
         assert response.status_code == status.HTTP_404_NOT_FOUND
         assert response.json() == expected_response

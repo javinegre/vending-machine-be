@@ -15,14 +15,25 @@ class OrderMissingResourceError(Exception):
         super().__init__(self.message)
 
 
+class OrderPriceMismatchError(Exception):
+    """Exception raised for price mismatch when purchasing"""
+
+    def __init__(self):
+        self.message = "Price mismatch"
+        super().__init__(self.message)
+
+
 class ProductOrder:
-    def buy(self, customer_id, slot_id):
+    def buy(self, customer_id, slot_id, price):
 
         slot = VendingMachineSlot.objects.get(id=slot_id)
         customer = Customer.objects.get(id=customer_id)
 
         if slot.quantity == 0:
             raise OrderMissingResourceError("stock")
+
+        if str(slot.product.price) != price:
+            raise OrderPriceMismatchError
 
         new_balance = customer.wallet.balance - slot.product.price
 
