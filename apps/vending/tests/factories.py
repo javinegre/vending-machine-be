@@ -1,6 +1,7 @@
 from _decimal import Decimal
 from datetime import datetime
 from uuid import uuid4
+import pytz
 
 import pytest
 import factory
@@ -15,8 +16,8 @@ class ProductFactory(factory.django.DjangoModelFactory):
     id = uuid4()
     name = "Snickers Bar"
     price = Decimal("10.40")
-    created_at = datetime(2023, 5, 30, 12)
-    updated_at = datetime(2023, 5, 30, 23)
+    created_at = datetime(2023, 5, 30, 12, 0, 0, 0, tzinfo=pytz.UTC)
+    updated_at = datetime(2023, 5, 30, 23, 0, 0, 0, tzinfo=pytz.UTC)
 
 # This annotation (see more in section 3) is required because factories
 # inheriting from DjangoModelFactory will be stored in the db.

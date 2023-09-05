@@ -1,6 +1,7 @@
 from _decimal import Decimal
 from datetime import datetime
 from uuid import uuid4
+import pytz
 
 import pytest
 import factory
@@ -37,8 +38,8 @@ class CustomerFactory(factory.django.DjangoModelFactory):
     first_name = "Miquel"
     last_name = "Montoro"
     wallet = factory.SubFactory(WalletFactory)
-    created_at = datetime(2023, 5, 30, 12)
-    updated_at = datetime(2023, 5, 30, 23)
+    created_at = datetime(2023, 5, 30, 12, 0, 0, 0, tzinfo=pytz.UTC)
+    updated_at = datetime(2023, 5, 30, 23, 0, 0, 0, tzinfo=pytz.UTC)
 
 
 @pytest.mark.django_db
