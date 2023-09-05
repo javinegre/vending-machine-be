@@ -3,12 +3,12 @@ from datetime import datetime
 from uuid import uuid4
 
 import pytest
-from factory.django import DjangoModelFactory
+import factory
 
 from apps.vending.models import Product, VendingMachineSlot
 
 
-class ProductFactory(DjangoModelFactory):
+class ProductFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Product
 
@@ -36,11 +36,12 @@ def test_product_creation():
     assert stored_product.name == "Heidi chocolate"
 
 
-class VendingMachineSlotFactory(DjangoModelFactory):
+class VendingMachineSlotFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = VendingMachineSlot
 
     id = uuid4()
+    product = factory.SubFactory(ProductFactory)
     quantity = 2
     row = 1
     column = 1

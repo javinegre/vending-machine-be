@@ -42,7 +42,7 @@ class TestLogin:
             },
             "wallet": {
                 "id": ANY,
-                "balance": "10.00"
+                "balance": "50.00"
             }
         }
 

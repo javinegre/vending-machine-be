@@ -5,6 +5,7 @@ from uuid import uuid4
 import factory
 import pytest
 from rest_framework import status
+from apps.customer.tests.factories import CustomerFactory
 
 from apps.vending.models import Product, VendingMachineSlot
 from apps.vending.tests.factories import ProductFactory, VendingMachineSlotFactory
@@ -17,7 +18,7 @@ def products_list() -> list[Product]:
 
 @pytest.fixture
 def slots_grid(products_list) -> list[VendingMachineSlot]:
-    """returns a grid of slots of 5x2"""
+    """returns a grid of slots of 4x3"""
     slots = []
     for row in range(1, 5):
         for column in range(1, 4):

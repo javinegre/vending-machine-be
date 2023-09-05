@@ -3,17 +3,17 @@ from datetime import datetime
 from uuid import uuid4
 
 import pytest
-from factory.django import DjangoModelFactory
+import factory
 
 from apps.customer.models import Customer, Wallet
 
 
-class WalletFactory(DjangoModelFactory):
+class WalletFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Wallet
 
     id = uuid4()
-    balance = Decimal(10.0)
+    balance = Decimal(50.0)
 
 
 @pytest.mark.django_db
@@ -27,7 +27,7 @@ def test_wallet_creation():
     assert stored_wallet.balance == Decimal("15.50")
 
 
-class CustomerFactory(DjangoModelFactory):
+class CustomerFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Customer
 
@@ -36,6 +36,7 @@ class CustomerFactory(DjangoModelFactory):
     password = "h05714-P1l0t35"
     first_name = "Miquel"
     last_name = "Montoro"
+    wallet = factory.SubFactory(WalletFactory)
     created_at = datetime(2023, 5, 30, 12)
     updated_at = datetime(2023, 5, 30, 23)
 
@@ -55,4 +56,4 @@ def test_customer_creation():
     assert stored_customer.first_name == "Maikel"
     assert stored_customer.last_name == "Montoro"
     assert stored_customer.wallet == test_wallet
-    assert stored_customer.wallet.balance == Decimal(10.0)
+    assert stored_customer.wallet.balance == Decimal(50.0)
