@@ -221,5 +221,5 @@ class TestProductOrder:
         response = client.post(
             "/buy/", data={"customer_id": test_customer.id, "slot_id": test_slot.id, "price": "10.40"})
 
-        assert response.status_code == status.HTTP_404_NOT_FOUND
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert response.json() == expected_response

@@ -39,6 +39,6 @@ class ProductOrderView(APIView):
             result = ProductOrder().buy(
                 request.data['customer_id'], request.data['slot_id'], request.data['price'])
         except OrderMissingResourceError as ex:
-            return Response(status=status.HTTP_404_NOT_FOUND, data={"error": ex.message})
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": ex.message})
 
         return Response(data=result)
