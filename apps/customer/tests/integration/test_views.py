@@ -24,7 +24,7 @@ def customers() -> list[Customer]:
 
 
 @pytest.mark.django_db
-class TestLogin:
+class TestLoginView:
     def test_successful_login(self, client, customers):
         data = {
             "user_name": "user-2",
@@ -75,3 +75,35 @@ class TestLogin:
         response = client.post("/login/", data=data)
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+
+@pytest.mark.django_db
+class TestAddMoneyView:
+    def test_add_money_success(self, client):
+        test_customer = CustomerFactory(
+            wallet=WalletFactory(balance=Decimal("20.00")))
+
+        expected_response = {
+            "balance": 25.00
+        }
+
+        response = client.post(
+            "/add-money/", data={"customer_id": test_customer.id, "amount": "5.00"})
+
+        assert response.json() == expected_response
+
+
+@pytest.mark.django_db
+class TestRefundView:
+    def test_refund_success(self, client):
+        test_customer = CustomerFactory(
+            wallet=WalletFactory(balance=Decimal("15.00")))
+
+        expected_response = {
+            "balance": 0.00
+        }
+
+        response = client.post(
+            "/refund/", data={"customer_id": test_customer.id})
+
+        assert response.json() == expected_response

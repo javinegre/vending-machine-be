@@ -6,6 +6,7 @@ from rest_framework import status
 
 from apps.customer.models import Customer
 from apps.customer.serializers import CustomerSerializer
+from apps.customer.wallet_actions import WalletActions
 
 
 class LoginView(APIView):
@@ -25,3 +26,20 @@ class LoginView(APIView):
         customers_serializer = CustomerSerializer(customers[0])
 
         return Response(data=customers_serializer.data)
+
+
+class AddMoneyView(APIView):
+    def post(self, request: Request) -> Response:
+
+        result = WalletActions().addMoney(
+            request.data['customer_id'], request.data['amount'])
+
+        return Response(data=result)
+
+
+class RefundView(APIView):
+    def post(self, request: Request) -> Response:
+
+        result = WalletActions().refund(request.data['customer_id'])
+
+        return Response(data=result)

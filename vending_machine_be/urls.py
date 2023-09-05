@@ -29,5 +29,7 @@ urlpatterns = [
         # path("<uuid:id>", vending_views.MyDetailViewToBeDone.as_view()),
         path("", vending_views.VendingMachineSlotView.as_view()),
     ])),
-    path("buy/", vending_views.ProductOrderView.as_view())
+    path("buy/", vending_views.ProductOrderView.as_view()),
+    path("add-money/", customer_views.AddMoneyView.as_view()),
+    path("refund/", customer_views.RefundView.as_view())
 ]
