@@ -28,5 +28,6 @@ urlpatterns = [
     path("slots/", include([
         # path("<uuid:id>", vending_views.MyDetailViewToBeDone.as_view()),
         path("", vending_views.VendingMachineSlotView.as_view()),
-    ]))
+    ])),
+    path("buy/", vending_views.ProductOrderView.as_view())
 ]

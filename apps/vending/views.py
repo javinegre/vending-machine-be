@@ -7,6 +7,7 @@ from apps.vending.serializers import VendingMachineSlotSerializer
 from apps.vending.validators import ListSlotsValidator
 
 from apps.vending.constants import VENDING_MACHINE_MAX_COLUMNS, VENDING_MACHINE_MAX_ROWS
+from apps.vending.product_order import ProductOrder
 
 
 class VendingMachineSlotView(APIView):
@@ -29,3 +30,11 @@ class VendingMachineSlotView(APIView):
 
         # slots_serializer = VendingMachineSlotSerializer(slots, many=True)
         return Response(data=slots_grid)
+
+
+class ProductOrderView(APIView):
+    def post(self, request: Request) -> Response:
+        result = ProductOrder().buy(
+            request.data['customer_id'], request.data['slot_id'])
+
+        return Response(data=result)

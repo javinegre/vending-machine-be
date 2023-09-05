@@ -195,3 +195,19 @@ class TestListVendingMachineSlots:
 
         assert response.status_code == status.HTTP_200_OK
         assert response.json() == expected_response
+
+
+@pytest.mark.django_db
+class TestProductOrder:
+    def test_product_order(self, client):
+        test_slot = VendingMachineSlotFactory()
+        test_customer = CustomerFactory()
+
+        expected_response = {
+            "balance": 39.6
+        }
+
+        response = client.post(
+            "/buy/", data={"customer_id": test_customer.id, "slot_id": test_slot.id})
+
+        assert response.json() == expected_response
