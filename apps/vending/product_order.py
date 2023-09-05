@@ -40,6 +40,9 @@ class ProductOrder:
         if new_balance < 0:
             raise OrderMissingResourceError("balance")
 
+        slot.quantity -= 1
+        slot.save()
+
         customer.wallet.balance = new_balance
         customer.wallet.save()
 
