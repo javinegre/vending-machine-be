@@ -8,6 +8,9 @@ class Wallet(models.Model):
     class Meta:
         db_table = "wallet"
 
+    def __str__(self):
+        return "Wallet with balance: ${0}".format(self.balance)
+
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     balance = models.DecimalField(max_digits=6, decimal_places=2, validators=[
         MinValueValidator(Decimal("0.00"))])
@@ -18,6 +21,7 @@ class Customer(models.Model):
         db_table = "customer"
 
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    # TODO make user_name unique
     user_name = models.CharField(max_length=200)
     password = models.CharField(max_length=200)
     first_name = models.CharField(max_length=200)

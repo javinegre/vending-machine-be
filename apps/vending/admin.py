@@ -1,18 +1,18 @@
 from django.contrib import admin
-from apps.vending.models import Product, VendingMachineSlot
+from apps.customer.models import Wallet, Customer
 
 
-class ProductAdmin(admin.ModelAdmin):
-    list_display = ["name", "price", "created_at", "updated_at"]
+class WalletAdmin(admin.ModelAdmin):
+    list_display = ["id", "balance"]
+
+
+admin.site.register(Wallet, WalletAdmin)
+
+
+class CustomerAdmin(admin.ModelAdmin):
+    list_display = ["user_name", "first_name", "last_name",
+                    "wallet", "created_at", "updated_at"]
     ordering = ["-created_at"]
 
 
-admin.site.register(Product, ProductAdmin)
-
-
-class VendingMachineSlotAdmin(admin.ModelAdmin):
-    list_display = ["row", "column", "product", "quantity"]
-    ordering = ["row", "column"]
-
-
-admin.site.register(VendingMachineSlot, VendingMachineSlotAdmin)
+admin.site.register(Customer, CustomerAdmin)

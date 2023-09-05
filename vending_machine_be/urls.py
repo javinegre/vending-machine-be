@@ -19,10 +19,12 @@ from django.urls import path, include
 
 from apps.health.views import healthcheck
 import apps.vending.views as vending_views
+import apps.customer.views as customer_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('healthcheck/', healthcheck),
+    path("login/", customer_views.LoginView.as_view()),
     path("slots/", include([
         # path("<uuid:id>", vending_views.MyDetailViewToBeDone.as_view()),
         path("", vending_views.VendingMachineSlotView.as_view()),
